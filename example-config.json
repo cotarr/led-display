@@ -1,0 +1,15 @@
+{
+    "brightness": 60,
+    "units": "B",
+    "address": "127.0.0.1:8000",
+    "path": "/v1/data/0",
+    "use_ssl": false,
+    "ssl_check_hostname": false,
+    "ssl_custom_certs": false,
+    "ssl_CA_cert": "/home/user1/.tls/CAcert.pem",
+    "ssl_client_cert": "/home/user1/.tls/cert.pem",
+    "ssl_client_key": "/home/user1/.tls/key.pem",
+    "local_sensor_enable": false,
+    "local_calib_zero": 0.0,
+    "local_calib_span": 1.0
+}
