@@ -19,13 +19,21 @@ data property for temperature in degrees celsius.
 
 Expected response from remote IOT device:
 
-```
+```json
 {
   "timestamp": 1675171358,
   "data": 21.875,
   "error": 0,
   "errorMessage": ""
 }
+```
+where
+
+```
+timestamp - Integer (Unix time in seconds)
+data - Float (Temperature in degrees C)
+error - Integer (error code, 0 = no error)
+errorMessage - String, empty string if no error.
 ```
 
 ### File: led_2_digit.py
@@ -243,7 +251,7 @@ python3 local_get_data.py
 
 Expected response:
 
-```
+```json
 {
     "timestamp": 1675117930,
     "data": 24.946403884887694,
@@ -265,7 +273,7 @@ python3 api_get_data.py
 
 Expected Response:
 
-```
+```json
 {
     "timestamp": 1675118078,
     "data": 24.172,
@@ -309,3 +317,72 @@ display the red error LED and "EE" in red.
 This GitHub repository [ds18b20-api](https://github.com/cotarr/ds18b20-api) 
 can be viewed as an example program to read a DS18B20 temperature 
 and make the data available in the proper format.
+
+---
+
+# Dual Sensor Version
+
+The git repository contains a second alternate version of the program 
+in file `main-dual-sensor.py`.
+
+This is intended for the case of outdoor weather monitoring where 
+one sensor is in morning sun and the other sensor is in afternoon sun.
+The sensor with the lower value (in the shade) will be selected and displayed
+on the LED display.
+
+The GitHub repository [ds18b20-api](https://github.com/cotarr/ds18b20-api) 
+is capable to read two sensor inputs and return both results in a single API response.
+If more than 2 are configured, the first two at index [0] and [1] are used.
+
+To run the alternate version:
+
+```
+python3 main-dual-sensor.py
+```
+
+The startup file `main-dual-sensor.py` is capable to read either single sensor data 
+where the HTTP fetch of a JSON object is parsed as a python dictionary or alternately 
+dual sensor data where the HTTP fetch of a JSON encoded array of objects is parsed 
+as a python list of python dictionaries. The selection is automatic based 
+python type checking for `type() == list` or `type() == dict`.
+
+Single sensor data format
+```json
+{
+    "timestamp": 1674937453,
+    "data": -4.437,
+    "error": 0,
+    "errorMessage": ""
+}
+```
+
+
+Dual sensor data format
+
+```json
+[
+    {
+        "timestamp": 1674937453,
+        "data": 21.437,
+        "error": 0,
+        "errorMessage": ""
+    },
+    {
+        "timestamp": 1674937453,
+        "data": 19.233,
+        "error": 0,
+        "errorMessage": ""
+    }
+]
+```
+where
+
+```
+timestamp - Integer (Unix time in seconds)
+data - Float (Temperature in degrees C)
+error - Integer (error code, 0 = no error)
+errorMessage - String, empty string if no error.
+```
+
+The original `main.py` version is also available
+for use with single sensors.
